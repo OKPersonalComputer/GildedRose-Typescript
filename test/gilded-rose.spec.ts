@@ -59,5 +59,16 @@ describe('Gilded Rose', function () {
         expect(items[0].quality).to.equal(0);
     });
 
+    it('should decrease quality twice as fast as non-special items', function () {
+        const gildedRose = new GildedRose([new Item('Conjured Mana Cake', 4, 20)]);
+        const items = gildedRose.updateQuality();
+        expect(items[0].quality).to.equal(18);
+    });
+
+    it('should decrease in quality by four in Conjured items after sell by date', function () {
+        const gildedRose = new GildedRose([new Item('Conjured orange', -1, 20)]);
+        const items = gildedRose.updateQuality();
+        expect(items[0].quality).to.equal(16);
+    });
 
 });

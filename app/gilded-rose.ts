@@ -30,14 +30,28 @@ export class GildedRose {
 
             // non-special cases - Once the sell by date has passed, Quality degrades twice as fast
             if (!Object.values(specialItems).includes(ourItems[i].name)) {
-                if (ourItems[i].quality > 0) {
-                    if (ourItems[i].sellIn > 0) {
-                        ourItems[i].quality--;
-                    } else {
-                        ourItems[i].quality = Math.max(0, ourItems[i].quality - 2);
+                // special case - conjured item
+                if (ourItems[i].name.startsWith('Conjured ')) {
+                    if (ourItems[i].quality > 0) {
+                        if (ourItems[i].sellIn > 0) {
+                            ourItems[i].quality = Math.max(0, ourItems[i].quality - 2);
+                        } else {
+                            ourItems[i].quality = Math.max(0, ourItems[i].quality - 4);
+                        }
+                    }
+                }
+                else {
+                    if (ourItems[i].quality > 0) {
+                        if (ourItems[i].sellIn > 0) {
+                            ourItems[i].quality--;
+                        } else {
+                            ourItems[i].quality = Math.max(0, ourItems[i].quality - 2);
+                        }
                     }
                 }
             }
+
+
 
             // special case - backstage pass
             else if (ourItems[i].name === specialItems.backstage) {
