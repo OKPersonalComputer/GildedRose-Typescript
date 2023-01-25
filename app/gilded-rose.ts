@@ -27,49 +27,44 @@ export class GildedRose {
         }
 
         for (let i = 0; i < ourItems.length; i++) {
+
+            // non-special cases - Once the sell by date has passed, Quality degrades twice as fast
             if (!Object.values(specialItems).includes(ourItems[i].name)) {
                 if (ourItems[i].quality > 0) {
-                    ourItems[i].quality--;
-                }
-            } else {
-                if (ourItems[i].quality < 50) {
-                    ourItems[i].quality = ourItems[i].quality + 1
-                    if (ourItems[i].name == specialItems.backstage) {
-                        if (ourItems[i].sellIn < 11) {
-                            if (ourItems[i].quality < 50) {
-                                ourItems[i].quality++;
-                            }
-                        }
-                        if (ourItems[i].sellIn < 6) {
-                            if (ourItems[i].quality < 50) {
-                                ourItems[i].quality++;
-                            }
-                        }
-                    }
-                }
-            }
-            if (ourItems[i].name != specialItems.sulfuras) {
-                ourItems[i].sellIn--;
-            }
-            if (ourItems[i].sellIn < 0) {
-                if (ourItems[i].name != specialItems.brie) {
-                    if (ourItems[i].name != specialItems.backstage) {
-                        if (ourItems[i].quality > 0) {
-                            if (ourItems[i].name != specialItems.sulfuras) {
-                                ourItems[i].quality--;
-                            }
-                        }
+                    if (ourItems[i].sellIn > 0) {
+                        ourItems[i].quality--;
                     } else {
-                        ourItems[i].quality = ourItems[i].quality - ourItems[i].quality
+                        ourItems[i].quality = Math.max(0, ourItems[i].quality - 2);
                     }
-                } else {
-                    if (ourItems[i].quality < 50) {
+                }
+            }
+
+            // special case - backstage pass
+            else if (ourItems[i].name === specialItems.backstage) {
+                if (ourItems[i].quality < 50) {
+                    if (ourItems[i].sellIn <= 0) {
+                        ourItems[i].quality = 0;
+                    } else if (ourItems[i].sellIn < 6) {
+                        ourItems[i].quality += 3;
+                    } else if (ourItems[i].sellIn < 11) {
+                        ourItems[i].quality += 2;
+                    } else {
                         ourItems[i].quality++;
                     }
                 }
             }
-        }
+            // special case - brie
+            else if (ourItems[i].name === specialItems.brie) {
+                if (ourItems[i].quality < 50) {
+                    ourItems[i].quality++;
+                }
+            }
 
+            // reduce sellIn date
+            if (ourItems[i].name != specialItems.sulfuras) {
+                ourItems[i].sellIn--;
+            }
+        }
         return ourItems;
     }
 }

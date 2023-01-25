@@ -17,6 +17,8 @@ console.log(gildedRose5.updateQuality())
 const gildedRose6 = new GildedRose([new Item('Prawns', 4, 20)]);
 console.log(gildedRose6.updateQuality())
 
+// const gildedRose7 = 
+
 /*
 [ Item { name: 'Sulfuras, Hand of Ragnaros', sellIn: 4, quality: 80 } ]
 [
